@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface AgreementRepository extends JpaRepository<Agreement, Long> {
     List<Agreement> findAllById(Long agreementId);
-    List<Agreement> findByRequiredTrue();;
+    List<Agreement> findByRequiredTrue();
+    long countByIdIn(List<Long> ids);
 }

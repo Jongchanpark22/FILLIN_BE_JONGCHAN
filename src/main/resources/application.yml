@@ -7,6 +7,11 @@ spring:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
 
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000 # 기본 TTL: 1시간 (밀리초)
+
   profiles:
     active: local
 

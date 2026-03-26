@@ -1,5 +1,6 @@
 package com.fillin.global.config;
 
+import com.fillin.global.security.handler.CustomAuthenticationFailureHandler;
 import com.fillin.global.security.jwt.JwtAuthenticationFilter;
 import com.fillin.global.security.jwt.JwtTokenProvider;
 import com.fillin.repository.member.MemberRepository;
@@ -23,6 +24,7 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {

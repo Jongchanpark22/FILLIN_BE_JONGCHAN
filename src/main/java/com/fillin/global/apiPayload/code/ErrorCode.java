@@ -17,12 +17,18 @@ public enum ErrorCode implements BaseCode {
 
     // member Error
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER404", "사용자를 찾을 수 없습니다."),
-    DUPLICATE_NICKNAME(HttpStatus.MULTI_STATUS, "USER4031", "중복된 닉네임입니다."),
-    DUPLICATE_EMAIL(HttpStatus.MULTI_STATUS, "USER4030", "중복된 이메일입니다."),
+    DUPLICATE_NICKNAME(HttpStatus.CONFLICT, "USER409", "중복된 닉네임입니다."),
+    DUPLICATE_EMAIL(HttpStatus.CONFLICT, "USER408", "중복된 이메일입니다."),
     USER_NOT_AUTHENTICATED(HttpStatus.UNAUTHORIZED, "USER_401", "로그인 하지 않았습니다."),
     USER_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "USER_403", "권한이 없습니다."),
     PASSWORD_CONFIRM_MISMATCH(HttpStatus.BAD_REQUEST, "AUTH_400_PW_MISMATCH", "비밀번호가 일치하지 않습니다."),
     ALREADY_ONBOARDED_USER(HttpStatus.BAD_REQUEST, "AUTH_404", "이미 온보딩을 마친 회원입니다."),
+    INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "AUTH_401_INVALID_CRED", "잘못된 비밀번호입니다."),
+    ACCOUNT_EXPIRED(HttpStatus.UNAUTHORIZED, "AUTH_401_EXPIRED", "계정이 만료되었습니다."),
+    ACCOUNT_LOCKED(HttpStatus.UNAUTHORIZED, "AUTH_401_LOCKED", "계정이 잠겨있습니다."),
+    CREDENTIALS_EXPIRED(HttpStatus.UNAUTHORIZED, "AUTH_401_CRED_EXP", "자격증명이 만료되었습니다."),
+    ACCOUNT_DISABLED(HttpStatus.UNAUTHORIZED, "AUTH_401_DISABLED", "계정이 비활성화되었습니다."),
+    OAUTH_INVALID_GRANT(HttpStatus.UNAUTHORIZED, "OAUTH_401_GRANT", "유효하지 않은 인증 코드입니다."),
 
 
     // Report Error
@@ -62,7 +68,7 @@ public enum ErrorCode implements BaseCode {
     KAKAO_INVALID_GRANT(HttpStatus.UNAUTHORIZED, "KAKAO_401_INVALID_GRANT", "유효하지 않거나 만료된 인가 코드입니다."),
     KAKAO_AUTH_FAILED(HttpStatus.UNAUTHORIZED, "KAKAO_401_AUTH_FAILED", "카카오 인증에 실패했습니다."),
     ALREADY_REGISTERED_WITH_OTHER_LOGIN(HttpStatus.CONFLICT, "AUTH_409_ALREADY_REGISTERED", "해당 이메일은 다른 로그인 방식으로 이미 가입되어 있습니다."),
-    SOCIAL_LOGIN_INVALID_STATE(HttpStatus.UNAUTHORIZED, "SOCIAL_401_INVALID_GRANT", "유효하지 않거나 만료된 STATE 값입니다.."),
+    SOCIAL_LOGIN_INVALID_STATE(HttpStatus.UNAUTHORIZED, "SOCIAL_401_INVALID_GRANT", "유효하지 않거나 만료된 STATE 값입니다."),
 
     // Google
     GOOGLE_API_ERROR(HttpStatus.UNAUTHORIZED, "GOOGLE_400_API", "구글 서버와 통신중 오류가 발생했습니다."),

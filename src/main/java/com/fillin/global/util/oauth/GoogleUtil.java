@@ -2,21 +2,15 @@ package com.fillin.global.util.oauth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fillin.dto.member.response.GoogleResponse; // 위에서 만든 DTO
+import com.fillin.dto.member.response.GoogleResponse;
 import com.fillin.global.apiPayload.code.ErrorCode;
-import com.fillin.global.security.exception.AuthFailureHandler;
+import com.fillin.global.security.exception.AuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @Slf4j
 @Component
@@ -47,20 +41,20 @@ public class GoogleUtil {
             // 토큰의 주인(aud)이 내 앱(clientId)과 일치하는지
             if (profile.getAud() == null || !profile.getAud().equals(clientId)) {
                 log.error("[GOOGLE] 내 앱의 토큰이 아닙니다. token_aud={}, my_client_id={}", profile.getAud(), clientId);
-                throw new AuthFailureHandler(ErrorCode.GOOGLE_AUTH_FAILED);
+                throw new AuthException(ErrorCode.GOOGLE_AUTH_FAILED);
             }
 
             return profile;
         } catch (HttpClientErrorException e) {
             // 400 Bad Request 등이 뜨면 토큰이 위조되었거나 만료된 것입니다.
             log.error("[GOOGLE] Invalid ID Token: status={}, body={}", e.getStatusCode(), e.getResponseBodyAsString());
-            throw new AuthFailureHandler(ErrorCode.GOOGLE_AUTH_FAILED);
+            throw new AuthException(ErrorCode.GOOGLE_AUTH_FAILED);
         } catch (JsonProcessingException e) {
             log.error("[🚨ERROR🚨] 구글 토큰 파싱 오류: {}", e.getMessage());
-            throw new AuthFailureHandler(ErrorCode.GOOGLE_JSON_PARSE_ERROR);
+            throw new AuthException(ErrorCode.GOOGLE_JSON_PARSE_ERROR);
         } catch (Exception e) {
             log.error("[🚨ERROR🚨] 구글 ID Token 검증 중 알 수 없는 오류: {}", e.getMessage());
-            throw new AuthFailureHandler(ErrorCode.GOOGLE_API_ERROR);
+            throw new AuthException(ErrorCode.GOOGLE_API_ERROR);
         }
     }
 

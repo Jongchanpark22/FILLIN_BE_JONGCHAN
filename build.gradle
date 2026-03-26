@@ -68,6 +68,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-admin:9.2.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
 }
 sentry {
 	// 빌드 시 소스 코드를 Sentry에 업로드하여 에러 발생 지점을 정확히 파악하게 합니다.
