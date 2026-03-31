@@ -3,6 +3,7 @@ package com.fillin.global.apiPayload.exception;
 
 import com.fillin.global.apiPayload.code.ErrorCode;
 import com.fillin.global.apiPayload.response.Response;
+import com.fillin.global.security.exception.AuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.BeanCreationException;
@@ -105,6 +106,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(Response.fail(ErrorCode.INTERNAL_SERVER_ERROR, ex.getMessage()));
     }
 
+    // ===================== 인증 예외 ======================
+
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<Response<Void>> handleAuthException(AuthException ex) {
+        ErrorCode errorCode = ex.getErrorCode();
+
+        log.warn("[AuthException] code: {}, message: {}", errorCode.getCode(), errorCode.getMessage());
+
+        Response<Void> response = Response.fail(errorCode);
+        return new ResponseEntity<>(response, errorCode.getStatus());
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Object> handleRuntimeException(RuntimeException ex) {
         log.error("RuntimeException occurred: ", ex);
@@ -122,16 +135,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Response.fail(ErrorCode.INTERNAL_SERVER_ERROR));
     }
-
-//auth 어노테이션 관련 예외 처리
-
-//    @ExceptionHandler(AuthException.class)
-//    public ResponseEntity<Response<Void>> handleAuthException(AuthException ex) {
-//        ErrorCode errorCode = ex.getErrorCode();
-//
-//        log.warn("[AuthException] code: {}, message: {}", errorCode.getCode(), errorCode.getMessage());
-//
-//        Response<Void> response = Response.fail(errorCode);
-//        return new ResponseEntity<>(response, errorCode.getStatus());
-//    }
 }

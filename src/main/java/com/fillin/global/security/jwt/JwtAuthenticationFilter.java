@@ -1,9 +1,8 @@
 package com.fillin.global.security.jwt;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fillin.global.apiPayload.code.ErrorCode;
-import com.fillin.global.apiPayload.response.Response;
+import com.fillin.global.apiPayload.exception.GlobalException;
 import com.fillin.global.security.exception.AuthException;
 import com.fillin.repository.member.MemberRepository;
 import jakarta.servlet.FilterChain;
@@ -66,21 +65,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (AuthException e) {
-            log.warn("[401] JWT 필터 인증 실패", e);
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json;charset=UTF-8");
-
-            Response<Void> errorResponse = e.toResponse();
-            String json = new ObjectMapper().writeValueAsString(errorResponse);
-            response.getWriter().write(json);
-        }catch (Exception e) {
+            // GlobalExceptionHandler에서 처리하도록 예외 던지기
+            throw e;
+        } catch (Exception e) {
             log.error("[500] JWT 필터 처리 중 예상치 못한 오류 발생", e);
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.setContentType("application/json;charset=UTF-8");
-
-            Response<String> errorResponse = Response.fail(ErrorCode.INTERNAL_SERVER_ERROR);
-            String json = new ObjectMapper().writeValueAsString(errorResponse);
-            response.getWriter().write(json);
+            throw new GlobalException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -44,6 +44,10 @@ public class SecurityConfig {
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
+                // ✅ 나중에 폼 로그인 추가 시, 아래 주석 제거:
+                // .formLogin(form -> form
+                //         .failureHandler(customAuthenticationFailureHandler)
+                // )
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/api/auth/**").permitAll() // 인증 없이 접근 허용
